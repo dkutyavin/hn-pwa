@@ -9,10 +9,10 @@ export default function Home() {
   if (status === "fetching") return <div>loading...</div>;
 
   return (
-    <div className="space-y-6 m-5">
+    <main>
       {data.map(item => (
         <Card key={item.id} {...item} />
       ))}
-    </div>
+    </main>
   );
 }
