@@ -2,7 +2,7 @@ import { Item } from "../../interfaces/api";
 
 export function Card(item: Item) {
   return (
-    <div className="max-w-sm min-h-100 m-auto flex p-6 bg-white rounded-lg shadow-xl">
+    <div className="py-6 pl-5 rounded-lg shadow-sm">
       <h1>{item.title}</h1>
     </div>
   );

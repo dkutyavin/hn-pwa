@@ -8,5 +8,11 @@ export default function Home() {
   if (status === "error") return <div>failed to load</div>;
   if (status === "fetching") return <div>loading...</div>;
 
-  return data.map(item => <Card key={item.id} {...item} />);
+  return (
+    <div className="space-y-6 m-5">
+      {data.map(item => (
+        <Card key={item.id} {...item} />
+      ))}
+    </div>
+  );
 }
