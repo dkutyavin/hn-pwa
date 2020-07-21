@@ -9,3 +9,11 @@ export function Card(item: Item) {
     </article>
   );
 }
+
+export function SceletonCard() {
+  return (
+    <article className="flex-1 flex px-5 shadow-sm items-center">
+      <div className="h-5 w-3/5 bg-gray-400"></div>
+    </article>
+  );
+}
