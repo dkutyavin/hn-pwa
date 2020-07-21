@@ -1,7 +1,7 @@
 import { Item } from "../interfaces/api";
 import { Card } from "../src/components/Card";
 import { useRequest } from "../src/utils/useRequest";
-import { Header } from "../src/components/Header";
+import Layout from "../src/components/Layout";
 
 export default function Home() {
   const { data, status } = useRequest<Item[]>("/api/top");
@@ -10,11 +10,10 @@ export default function Home() {
   if (status === "fetching") return <div>loading...</div>;
 
   return (
-    <main>
-      <Header />
+    <Layout>
       {data.map(item => (
         <Card key={item.id} {...item} />
       ))}
-    </main>
+    </Layout>
   );
 }
