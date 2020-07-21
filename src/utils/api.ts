@@ -1,19 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Item } from "../../interfaces/api";
 
-const API_URL = "https://hacker-news.firebaseio.com/v0";
-
-function getEntityUrl(entityType: string) {
-  return `${API_URL}/${entityType}.json`;
-}
-
-export async function getFromApi<T = any>(entityType: string) {
-  const url = getEntityUrl(entityType);
-  const res = await fetch(url);
-  const data = await res.json();
-  return data as T;
-}
-
 export function getItemById(id: string) {
   return getFromApi<Item>(`item/${id}`);
 }
@@ -32,4 +19,16 @@ export async function getListFromApi(
   const firstPage = await Promise.all(list.slice(0, LIMIT).map(getItemById));
 
   res.status(200).json(firstPage);
+}
+
+function getEntityUrl(entityType: string) {
+  const API_URL = "https://hacker-news.firebaseio.com/v0";
+  return `${API_URL}/${entityType}.json`;
+}
+
+async function getFromApi<T = any>(entityType: string) {
+  const url = getEntityUrl(entityType);
+  const res = await fetch(url);
+  const data = await res.json();
+  return data as T;
 }
