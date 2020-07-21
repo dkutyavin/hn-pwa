@@ -7,18 +7,16 @@ export function getItemById(id: string) {
 
 export async function getListFromApi(
   type: string,
-  { req, res }: { req: NextApiRequest; res: NextApiResponse },
+  { req, res }: RequestHandlerParams,
 ) {
-  const { method } = req;
-  const LIMIT = 10;
+  getHandler({ req, res }, async () => {
+    const LIMIT = 10;
 
-  if (method !== "GET")
-    return res.status(405).end(`Method ${method} Not Allowed`);
+    const list = await getFromApi<string[]>(type);
+    const firstPage = await Promise.all(list.slice(0, LIMIT).map(getItemById));
 
-  const list = await getFromApi<string[]>(type);
-  const firstPage = await Promise.all(list.slice(0, LIMIT).map(getItemById));
-
-  res.status(200).json(firstPage);
+    return firstPage;
+  });
 }
 
 function getEntityUrl(entityType: string) {
@@ -32,3 +30,23 @@ async function getFromApi<T = any>(entityType: string) {
   const data = await res.json();
   return data as T;
 }
+
+export async function getHandler<T = any>(
+  { req, res }: RequestHandlerParams,
+  getter: () => Promise<T>,
+) {
+  const { method } = req;
+
+  if (method !== "GET") {
+    return res.status(405).end(`Method ${method} Not Allowed`);
+  }
+
+  const data = await getter();
+
+  res.status(200).json(data);
+}
+
+type RequestHandlerParams = {
+  req: NextApiRequest;
+  res: NextApiResponse;
+};
