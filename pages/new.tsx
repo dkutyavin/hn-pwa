@@ -1,6 +1,7 @@
 import { Item } from "../interfaces/api";
 import { Card } from "../src/components/Card";
 import { useRequest } from "../src/utils/useRequest";
+import { Header } from "../src/components/Header";
 
 export default function New() {
   const { data, status } = useRequest<Item[]>("/api/new");
@@ -10,6 +11,7 @@ export default function New() {
 
   return (
     <main>
+      <Header />
       {data.map(item => (
         <Card key={item.id} {...item} />
       ))}
