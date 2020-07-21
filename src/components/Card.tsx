@@ -2,10 +2,10 @@ import { Item } from "../../interfaces/api";
 
 export function Card(item: Item) {
   return (
-    <div className="py-6 pl-5 rounded-lg shadow-sm">
+    <article className="py-6 px-5 shadow-sm">
       <a target="_blank" rel="noreferrer" href={item.url}>
-        <h1>{item.title}</h1>
+        <h3 className="font-sans text-lg text-gray-800">{item.title}</h3>
       </a>
-    </div>
+    </article>
   );
 }
