@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Item } from "../../../interfaces/api";
-import { getFromApi } from "../../../src/utils/api";
+import { getItemById } from "../../../src/utils/api";
 
 export default async function getItem(
   req: NextApiRequest,
@@ -17,8 +16,4 @@ export default async function getItem(
 
   const item = await getItemById(id as string);
   return res.status(200).json(item);
-}
-
-export function getItemById(id: string) {
-  return getFromApi<Item>(`item/${id}`);
 }
