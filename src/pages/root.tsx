@@ -1,12 +1,12 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { Index } from '.'
+import { TopPage } from './top'
 
 export function Root() {
   return (
     <Switch>
       <Route path="/">
-        <Index />
+        <TopPage />
       </Route>
     </Switch>
   )
