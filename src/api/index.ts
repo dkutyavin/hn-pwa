@@ -1,28 +1,23 @@
+import { ID, Item } from '../interfaces/HackerNewsAPI'
 import { fetcher } from './core'
 import { ENDPOINTS } from './endpoints'
 
-export async function getTopPage() {
-  let itemIds: ID[] = await fetcher(ENDPOINTS.TOP())
-  let items = await getItems(itemIds)
-
-  return items
+export function getTopPageIDs() {
+  return fetcher<ID[]>(ENDPOINTS.TOP())
 }
 
-function getItems(itemIDs: ID[]) {
-  const AMOUNT = 10 // todo - add pagination
-
-  let currentPageIDS = itemIDs.slice(0, AMOUNT)
-  let fetchers = currentPageIDS.map(getItemById)
-
-  return Promise.all<Item>(fetchers)
+export function getBestPageIDs() {
+  return fetcher<ID[]>(ENDPOINTS.BEST())
 }
 
-function getItemById(id: ID) {
-  return fetcher(ENDPOINTS.ITEM(id))
+export function getNewPageIDs() {
+  return fetcher<ID[]>(ENDPOINTS.NEW())
 }
 
-interface Item {
-  id: string
+export function getItems(itemIDs: ID[]) {
+  return Promise.all(itemIDs.map(getItemById))
 }
 
-type ID = string
+export function getItemById(id: ID) {
+  return fetcher<Item>(ENDPOINTS.ITEM(id))
+}

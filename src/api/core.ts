@@ -1,10 +1,10 @@
 /**
  * Simple json getter
  */
-export async function fetcher(url: string) {
+export async function fetcher<T = unknown>(url: string) {
   const response = await fetch(url, getRequestParams())
   const result = await response.json()
-  return result
+  return result as T
 }
 
 function getRequestParams() {

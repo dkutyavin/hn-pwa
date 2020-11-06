@@ -1,19 +1,44 @@
 import React from 'react'
-import { useQuery } from 'react-query'
-import { getTopPage } from '../api'
+import { useInfiniteQuery } from 'react-query'
+import useIntersectionObserver from '../hooks/useIntersectionObserver'
+import { getTopStories } from '../services/top-stories'
 
 export function TopPage() {
-  const { data, status } = useQuery('top', getTopPage)
+  const { data, fetchMore, canFetchMore, isFetchingMore } = useInfiniteQuery(
+    'topStories',
+    (key, page: number = 0) => getTopStories(page),
+    {
+      getFetchMore: (lastPage) => lastPage.next,
+    }
+  )
 
-  if (status === 'loading') {
-    return <div>Грузим</div>
-  }
+  const stories = data?.flatMap((page) => page.stories)
+
+  const loadMoreButtonRef = React.useRef<HTMLButtonElement>(null)
+
+  useIntersectionObserver({
+    enabled: canFetchMore,
+    target: loadMoreButtonRef.current!,
+    onIntersect: () => fetchMore(),
+  })
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      {data!.map((it: any) => (
-        <pre>{it.title}</pre>
-      ))}
+    <div>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {stories?.map((story) => (
+          <pre>
+            <a href={story.url}>{story.title}</a>
+          </pre>
+        ))}
+      </div>
+
+      <button
+        ref={loadMoreButtonRef}
+        disabled={!canFetchMore || !!isFetchingMore}
+        onClick={() => fetchMore()}
+      >
+        more
+      </button>
     </div>
   )
 }
