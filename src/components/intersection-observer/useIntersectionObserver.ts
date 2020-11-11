@@ -33,7 +33,7 @@ export default function useIntersectionObserver({
 
 interface UseIntersectionObserverParams {
   onIntersect: () => any
-  target: Element
+  target: Element | null
 
   enabled?: boolean
 }
