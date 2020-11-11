@@ -1,6 +1,6 @@
 import React from 'react'
 import { useInfiniteQuery } from 'react-query'
-import useIntersectionObserver from '../hooks/useIntersectionObserver'
+import { IntersectionObserverWrapper } from '../components/intersection-observer'
 import { getTopStories } from '../services/top-stories'
 
 export function TopPage() {
@@ -14,13 +14,7 @@ export function TopPage() {
 
   const stories = data?.flatMap((page) => page.stories)
 
-  const loadMoreButtonRef = React.useRef<HTMLButtonElement>(null)
-
-  useIntersectionObserver({
-    enabled: canFetchMore,
-    target: loadMoreButtonRef.current!,
-    onIntersect: () => fetchMore(),
-  })
+  const loadMoreEnabled = () => canFetchMore && !isFetchingMore
 
   return (
     <div>
@@ -32,13 +26,11 @@ export function TopPage() {
         ))}
       </div>
 
-      <button
-        ref={loadMoreButtonRef}
-        disabled={!canFetchMore || !!isFetchingMore}
-        onClick={() => fetchMore()}
-      >
-        more
-      </button>
+      <IntersectionObserverWrapper onIntersect={() => fetchMore()} enabled={loadMoreEnabled()}>
+        <button disabled={!loadMoreEnabled()} onClick={() => fetchMore()}>
+          Load more
+        </button>
+      </IntersectionObserverWrapper>
     </div>
   )
 }
